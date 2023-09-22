@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Student Database</title>
+    <!-- Favicon -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="libs/images/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="libs/images/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="libs/images/favicon-16x16.png"
+    />
+    <link rel="manifest" href="libs/images/site.webmanifest" />
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="libs/fontawesome/css/all.min.css" />
+    <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="libs/bootstrap/css/bootstrap.css" />
+    <link rel="stylesheet" href="libs/jquery-toast/css/jquery.toast.min.css" />
+    <link rel="stylesheet" href="libs/css/style.css" />
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+      <h1 id="title" class="navbar-nav d-flex justify-content-center">
+        Student Database
+      </h1>
+    </nav>
+
+    <!-- navbar with add student button -->
+    <ul class="navbar-nav fixed-top-nav">
+      <li class="nav-item">
+        <a class="nav-link" data-toggle="modal" data-target="#addModal"
+          >Add Student</a
+        >
+      </li>
+    </ul>
+
+    <div id="mainContainer" class="container">
+      <div class="row">
+        <div class="col-12">
+          <form id="filterForm">
+            <h4>Filters</h4>
+            <input
+              type="text"
+              placeholder="Search by Name or Email"
+              id="nameSearch"
+            />
+            <select id="schoolSearch">
+              <option value="">All Schools</option>
+            </select>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <table
+            id="studentsTable"
+            class="table table-bordered table-striped d-none d-lg-table"
+          >
+            <thead>
+              <tr>
+                <th>Name</th>
+
+                <th>Email</th>
+                <th>School/s</th>
+              </tr>
+            </thead>
+            <tbody id="studentsTbody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="row d-lg-none">
+        <div id="container2" class="col-12"></div>
+      </div>
+    </div>
+
+    <!-- Edit personnel modal -->
+    <div id="editModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form id="editForm" method="post" action="editPersonnel.php">
+            <div class="modal-header">
+              <h4 class="modal-title">Edit Personnel</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="firstName">First Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="firstName"
+                  id="editFirstName"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="lastName">Last Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="lastName"
+                  id="editLastName"
+                  required
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email</label>
+                <input
+                  type="email"
+                  class="form-control"
+                  name="email"
+                  id="editEmail"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="editSchoolSelect">School:</label>
+                <div class="dropdown">
+                  <button type="button" class="dropbtn">Select Schools</button>
+                  <div id="editSchoolSelect" class="dropdown-content">
+                    <!-- Checkboxes will be appended here dynamically -->
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+                value="Cancel"
+              />
+              <input
+                type="submit"
+                class="btn btn-success"
+                value="Save Changes"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Edit department modal -->
+    <div id="editDepartmentModal" class="modal fade">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <form
+            id="editDepartmentForm"
+            method="post"
+            action="editDepartment.php"
+          >
+            <div class="modal-header">
+              <h4 class="modal-title">Edit School</h4>
+            </div>
+            <div class="modal-body">
+              <div class="form-group">
+                <label for="editDepartmentName">School Name</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="editDepartmentName"
+                  id="editDepartmentName"
+                  required
+                />
+              </div>
+            </div>
+            <div class="modal-footer">
+              <input
+                type="button"
+                class="btn btn-default"
+                data-dismiss="modal"
+                value="Cancel"
+              />
+              <input
+                type="submit"
+                class="btn btn-success"
+                value="Save Changes"
+              />
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <!-- Add New Employee Modal -->
+    <div
+      class="modal fade"
+      id="addModal"
+      tabindex="-1"
+      role="dialog"
+      aria-labelledby="addModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="addModalLabel">Add New Student</h5>
+          </div>
+          <div class="modal-body">
+            <form id="addStudentForm">
+              <div class="form-group">
+                <label for="firstNameInput">First Name:</label>
+                <input
+                  type="text"
+                  id="firstNameInput"
+                  required
+                  title="First Name is required"
+                />
+              </div>
+              <div class="form-group">
+                <label for="lastNameInput">Last Name:</label>
+                <input
+                  type="text"
+                  id="lastNameInput"
+                  required
+                  title="Last Name is required"
+                />
+              </div>
+
+              <div class="form-group">
+                <label for="emailInput">Email:</label>
+                <input
+                  type="email"
+                  id="emailInput"
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+                  required
+                />
+              </div>
+              <div class="form-group">
+                <label for="addSchoolSelect">School:</label>
+                <div class="dropdown">
+                  <button type="button" class="dropbtn">Select Schools</button>
+                  <div id="addSchoolSelect" class="dropdown-content">
+                    <!-- Checkboxes will be appended here dynamically -->
+                  </div>
+                </div>
+              </div>
+
+              <div class="modal-footer">
+                <button
+                  type="button"
+                  id="closeButtonId"
+                  class="btn btn-secondary"
+                  data-dismiss="modal"
+                >
+                  Close
+                </button>
+                <button
+                  type="submit"
+                  value="Add Student"
+                  class="btn btn-primary"
+                  id="saveChangesButton"
+                >
+                  Add
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!--Scripts-->
+    <script src="libs/js/jquery-2.2.3.min.js"></script>
+    <script src="libs/js/script.js"></script>
+    <script src="libs/bootstrap/js/bootstrap.js"></script>
+    <script src="libs/bootstrap/js/bootstrap.min.js"></script>
+    <script src="libs/jquery-toast/js/jquery.toast.min.js"></script>
+  </body>
+</html>
